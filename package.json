@@ -1,7 +1,6 @@
 {
   "name": "kinder-tracking-trainer",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -30,5 +29,7 @@
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
     "pug": "^3.0.2"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }
