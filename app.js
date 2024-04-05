@@ -9,6 +9,7 @@ const cron = require('node-cron');
 const nodemailer = require('nodemailer');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+// const bcrypt = require('bcrypt');
 // const config = require('./config/config.env');
 const dotenv = require('dotenv');
 const { getEmailsOfCaregiversWithoutTraining } = require('./helper/getEmailsOfCaregiversWithoutTraining'); // Implement this function to query caregivers without training
