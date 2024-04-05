@@ -15,7 +15,7 @@ async function createCaregiver(req, res) {
     }
   
     // Access the file path in req.file
-    const photo = req.file.path;
+    // const photo = req.file.path;
   
     const newCaregiver = new Caregiver({
       name,
