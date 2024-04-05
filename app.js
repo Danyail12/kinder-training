@@ -68,6 +68,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/trainers', trainerRoutes);
 app.use('/api/caregivers', caregiverRoutes);
 app.use('/api/training-records', trainingRecordRoutes);
+app.get('/', (req, res) => {
+    res.send('server is up!');
+})
 
  const connectDB = async () => {
     try {
