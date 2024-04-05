@@ -1,4 +1,7 @@
+
 const mongoose = require('mongoose');
+
+
 
 const farmSchema = new mongoose.Schema({
   name: {
@@ -19,18 +22,22 @@ const farmSchema = new mongoose.Schema({
  country:{
    type: String,
  },
- caregrivers: [{
-   type:Object
+ caregivers: [{
+   savedCaregiver: {
+     type: mongoose.Types.ObjectId,
+     ref: 'Caregiver'
+   },
+   care: {
+     type: Object
+   }
  }],
  trainers: [{
-   type:Object
+   type: Object
  }],
  trainingRecords: [{
-   type:Object
+   type: Object
  }]
-
 });
 
 const Farm = mongoose.model('Farm', farmSchema);
-
-module.exports = Farm;
+module.exports = Farm

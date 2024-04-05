@@ -7,7 +7,16 @@ const caregiverRoutes = require('./routes/caregiverRoutes');
 const trainingRecordRoutes = require('./routes/trainingRecordRoutes');
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+// const config = require('./config/config.env');
+const dotenv = require('dotenv');
 const { getEmailsOfCaregiversWithoutTraining } = require('./helper/getEmailsOfCaregiversWithoutTraining'); // Implement this function to query caregivers without training
+
+
+dotenv.config({
+    path: './config/config.env'
+});
 
 // Create a nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -39,9 +48,16 @@ cron.schedule('0 0 1 * *', async () => {
         console.error('Error sending monthly training reminders:', error);
     }
 });
-
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH','HEAD'],
+    credentials: true,
+}
 
 const app = express();
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(cors(corsOptions))
 
 // Middleware
 app.use(bodyParser.json());
@@ -52,11 +68,24 @@ app.use('/api/trainers', trainerRoutes);
 app.use('/api/caregivers', caregiverRoutes);
 app.use('/api/training-records', trainingRecordRoutes);
 
+ const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(process.env.MONGO_URI);
+        console.log(`MongoDB connected: ${conn.connection.host}`)
+    } catch (error) {
+        console.log(error)
+        process.exit(1)
+    }
+}
+connectDB();
 // Database connection
-mongoose.connect('mongodb://localhost:27017/kinderGround', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Connected to MongoDB');
+// mongoose.connect(process.env.MONGODB_URI,{
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+//   .then(() => {
+//     console.log('Connected to MongoDB');
     // Start the server
-    app.listen(3000, () => console.log('Server running on port 3000'));
-  })
-  .catch(err => console.error('Failed to connect to MongoDB', err));
+    app.listen(process.env.PORT, () => console.log('Server running on port 3000'));
+//   })
+//   .catch(err => console.error('Failed to connect to MongoDB', err));

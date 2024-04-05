@@ -32,8 +32,8 @@ async function createCaregiver(req, res) {
       if(!farm) {
         return res.status(404).json({ message: 'Farm not found' });
       }
-      farm.caregrivers.push({
-        savedCaregiver
+      farm.caregivers.push({
+        care:savedCaregiver
     });
     await farm.save();
   
@@ -67,22 +67,36 @@ res.status(200).json({
 
 async function deleteCaregiver(req, res) {
   try {
+    // Find the caregiver by ID
+    const id = req.params.id;
+    const caregiver = await Caregiver.findById(req.params.id);
+    if (!caregiver) {
+      return res.status(404).json({ message: 'Caregiver not found' });
+    }
+
+    console.log('Caregiver ID:', req.params.id);
+    
     // Find the farm containing the caregiver
-    const farm = await Farm.findOne({ 'caregrivers._id': req.params.id });
+    const farm = await Farm.findOne({ 'caregivers.care': id });
+    console.log('Farm:', farm);
+
     if (!farm) {
       return res.status(404).json({ message: 'Associated farm not found' });
     }
 
     // Remove the caregiver from the farm's list of caregivers
-    farm.caregrivers.pull(req.params.id);
-
-    // Save the farm
+    farm.caregivers = farm.caregivers.filter(c => c.care._id.toString() !== req.params.id);
     await farm.save();
 
-    res.json({ message: 'Caregiver deleted successfully from farm' });
+    // Delete the caregiver from the caregiver collection
+    await Caregiver.findByIdAndDelete(req.params.id);
+
+    res.json({ message: 'Caregiver deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 }
+
+module.exports = deleteCaregiver;
 
 module.exports = { getAllCaregivers, createCaregiver, deleteCaregiver };
