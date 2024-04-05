@@ -3,12 +3,12 @@ const express = require('express');
 const isAuthenticated = require('../middlewares/auth');
 const { login, register,verify, forgetPassword, resetPassword, updateProfile, updatePassword, logout } = require('../controllers/authController');
 const { getAllFarms, createFarm, deleteFarm ,specificFarms} = require('../controllers/authController');
-const auth = require('../middlewares/auth');
+// const auth = require('../middlewares/auth');
 const router = express.Router();
 
 router.post('/login', login);
 router.post('/forgetPassword', forgetPassword);
-router.get('/verify', verify);
+router.post('/verify',isAuthenticated, verify);
 router.post('/resetPassword', resetPassword);
 router.post('/updateProfile',isAuthenticated, updateProfile);
 router.post('/updatePassword',isAuthenticated, updatePassword);

@@ -18,3 +18,6 @@ const createTransport = require("nodemailer").createTransport;
     text,
   });
 };
+
+module.exports = sendMail;
+

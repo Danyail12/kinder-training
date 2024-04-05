@@ -31,3 +31,4 @@ const jwt = require("jsonwebtoken");
       .json({ success: true, message, user: userData });
   };
   
+  module.exports = sendToken
