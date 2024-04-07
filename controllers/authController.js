@@ -61,7 +61,42 @@ const getAllFarms = async (req, res) => {
     try {
       // Get farms specific to the authenticated user
       const farms = await User.findById(req.user.id).populate('farms', '-password');
-      res.json(farms);
+      res.json({
+        success: true,
+        farms: farms
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  const specficTrainers = async (req, res) => {
+    try {
+      const farm = await Farm.findById(req.params.id);
+      if (!farm) {
+        return res.status(404).json({ message: 'Farm not found' });
+      }
+      res.status(200).json({
+        success: true,
+        message: 'Farm retrieved successfully',
+        farm: farm.trainers
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  const specificCaregivers = async (req, res) => {
+    try {
+      const farm = await Farm.findById(req.params.id);
+      if (!farm) {
+        return res.status(404).json({ message: 'Farm not found' });
+      }
+      res.status(200).json({
+        success: true,
+        message: 'Farm retrieved successfully',
+        farm: farm.caregivers
+      });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -86,7 +121,11 @@ const getAllFarms = async (req, res) => {
       // Add the farm to the authenticated user's farms array
       user.farms.push({savedFarm});
       await user.save();
-      res.status(201).json(savedFarm);
+      res.status(201).json({
+        success: true,
+        message: 'Farm created successfully',
+        farm: savedFarm
+      });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -115,7 +154,10 @@ const specificFarms = async (req, res) => {
       await User.findByIdAndUpdate(req.user.id, { $pull: { farms: farmId } });
       // Delete the farm from the farms collection
       await Farm.findByIdAndDelete(farmId);
-      res.json({ message: 'Farm deleted successfully' });
+      res.json({
+        success: true,
+        message: 'Farm deleted successfully'
+       });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -350,4 +392,6 @@ const specificFarms = async (req, res) => {
   };
   
 
-module.exports = { login, register, getAllFarms, createFarm, deleteFarm,specificFarms,logout, updateProfile, updatePassword, forgetPassword, resetPassword, verify };
+module.exports = { login, register, getAllFarms, createFarm, deleteFarm,specificFarms,
+  logout, updateProfile, updatePassword, forgetPassword, resetPassword, verify,
+  specificCaregivers, specficTrainers};

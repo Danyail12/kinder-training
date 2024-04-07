@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllCaregivers, createCaregiver, deleteCaregiver } = require('../controllers/caregiverController');
+const { getAllCaregivers, createCaregiver, deleteCaregiver,specificCaregiversTrainingRecord } = require('../controllers/caregiverController');
 // const auth = require('../middlewares/auth');
 const isAuthenticated = require('../middlewares/auth');
 // const multer = require('multer');
@@ -41,6 +41,7 @@ const router = express.Router();
 // const upload = multer({ storage: storage, fileFilter: fileFilter });  
 router.get('/:farmId', isAuthenticated, getAllCaregivers);
 router.post('/createCaregiver/:farmId',isAuthenticated, createCaregiver);
-router.delete('/:id', isAuthenticated ,deleteCaregiver);
+router.delete('/farms/:farmId/caregivers/:caregiverId',isAuthenticated, deleteCaregiver);
+router.get('/specificCaregiverTrainingRecord/:id',isAuthenticated, specificCaregiversTrainingRecord);
 
 module.exports = router;

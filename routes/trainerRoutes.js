@@ -14,6 +14,6 @@ router.get('/:farmId',isAuthenticated, getAllTrainers);
 
 // DELETE request to delete a trainer
 // Endpoint: /api/trainers/:id
-router.delete('/:id',isAuthenticated, deleteTrainer);
+router.delete('/farms/:farmId/trainers/:trainerId',isAuthenticated, deleteTrainer);
 router.get('/specificTrainer/:id',isAuthenticated, specificTrainer);
 module.exports = router;

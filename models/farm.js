@@ -14,7 +14,6 @@ const farmSchema = new mongoose.Schema({
   },
  Address: {
    type: String,
-  //  required: true
  },
  city: {
    type: String,
@@ -23,20 +22,17 @@ const farmSchema = new mongoose.Schema({
    type: String,
  },
  caregivers: [{
-   savedCaregiver: {
-     type: mongoose.Types.ObjectId,
-     ref: 'Caregiver'
-   },
-   care: {
+
      type: Object
-   }
  }],
  trainers: [{
    type: Object
  }],
+
+
  trainingRecords: [{
-   type: Object
- }]
+    type: Object
+  }]
 });
 
 const Farm = mongoose.model('Farm', farmSchema);

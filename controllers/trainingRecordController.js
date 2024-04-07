@@ -1,5 +1,7 @@
 const TrainingRecord = require('../models/trainingRecord');
 const Farm = require('../models/farm');
+const Trainer = require('../models/trainer');
+const Caregiver = require('../models/caregiver');
 
 async function getAllTrainingRecords(req, res) {
   try {
@@ -18,8 +20,18 @@ async function getAllTrainingRecords(req, res) {
 }
 
 async function createTrainingRecord(req, res) {
+
+  const trainer = await Trainer.findById(req.body.trainerId);
+  console.log(trainer)
+  const caregiverId= req.body.caregiverId
+  console.log(caregiverId)
+  const caregiver = await Caregiver.findById(caregiverId);
+  console.log(caregiver)
     const { farmName, trainers, caregivers, primaryTopic, secondaryTopic, deliveryMethod, trainerSignature, caregiverSignature } = req.body;
-  const farm = await Farm.findById(req.params.farmId);
+    const farm = await Farm.findById(req.params.farmId);
+    console.log(farm)
+
+
   if(!farm) {
     return res.status(404).json({ message: 'Farm not found' });
   }
@@ -33,13 +45,25 @@ async function createTrainingRecord(req, res) {
       trainerSignature,
       caregiverSignature
     });
+    console.log(newTrainingRecord)
   
     try {
       const savedTrainingRecord = await newTrainingRecord.save();
       farm.trainingRecords.push({
-          savedTrainingRecord
+        // savedTrainingRecord: savedTrainingRecord._id,
+        savedTrainingRecord
       })
       await farm.save();
+
+      trainer.trainingRecords.push({
+      savedTrainingRecord
+      })
+      await trainer.save();
+
+      caregiver.trainingRecords.push({
+        savedTrainingRecord
+      })
+      await caregiver.save();
       res.status(201).json({
         success: true,
         message: 'Training record created successfully',

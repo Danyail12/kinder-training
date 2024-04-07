@@ -19,6 +19,7 @@ const jwt = require("jsonwebtoken");
       _id: user._id,
       email: user.email,
       farms: user.farms,
+      verified: user.verified,
       token:token ,
       userId: user._id.toString(),
       otp:user.otp,
